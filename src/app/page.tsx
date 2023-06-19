@@ -3,7 +3,7 @@ import PostForm from './post-form';
 
 export default function Home() {
   return (
-    <main className="">
+    <main className="grid gap-8">
       <UserForm />
       <PostForm />
     </main>
