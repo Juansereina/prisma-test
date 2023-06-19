@@ -1,9 +1,21 @@
 'use client';
 
+import { useUserState } from './store';
+
 export default function Form() {
+  const user = useUserState((state) => state.user);
+
+  if (!user) {
+    return (
+      <h1 className="w-96 mt-4 mx-auto text-center">
+        Create a user to be able to create a Post!
+      </h1>
+    );
+  }
+
   return (
     <form
-      onClick={(e) => {
+      onSubmit={(e) => {
         e.preventDefault();
         console.log('entra');
       }}
