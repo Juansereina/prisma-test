@@ -1,10 +1,15 @@
 import { PrismaClient } from '@prisma/client';
-import { NextRequest } from 'next/server';
 import { z } from 'zod';
 
 const prisma = new PrismaClient();
 
-export const POST = async (req: NextRequest) => {
+export const GET = async () => {
+  const users = await prisma.user.findMany();
+
+  return new Response(JSON.stringify({ users }));
+};
+
+export const POST = async (req: Request) => {
   const data = await req.json();
   const userParser = z.object({
     name: z.string(),
