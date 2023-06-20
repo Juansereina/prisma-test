@@ -5,16 +5,19 @@ import { useUserState } from './store';
 import { postSchema } from './schema';
 
 export default function Form() {
-  const { register, handleSubmit, formState } = useForm<PostT>({
+  const user = useUserState((state) => state.user);
+  const { register, handleSubmit } = useForm<PostT>({
+    defaultValues: {
+      authorId: user?.id,
+    },
     resolver: zodResolver(postSchema),
   });
-
-  console.log({ formState });
-
-  const onSubmit: SubmitHandler<PostT> = (data) => {
-    console.log({ data });
+  const onSubmit: SubmitHandler<PostT> = async (data) => {
+    await fetch('/api/posts', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   };
-  const user = useUserState((state) => state.user);
 
   if (!user) {
     return (
@@ -50,6 +53,7 @@ export default function Form() {
           {...register('published')}
           placeholder="published"
         />
+        <input type="hidden" {...register('authorId')} />
       </fieldset>
       <button className="bg-white rounded p-2" type="submit">
         send
