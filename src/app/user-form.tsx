@@ -1,9 +1,17 @@
 'use client';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useUserState } from './store';
 
 export default function Form() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<UserT>();
+  const onSubmit: SubmitHandler<UserT> = async (data) => {
+    const response = await fetch('/api/user', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    const user = await response.json();
+    setUser(user);
+  };
   const { user, setUser } = useUserState(({ setUser, user }) => ({
     setUser,
     user,
@@ -19,14 +27,7 @@ export default function Form() {
 
   return (
     <form
-      onSubmit={handleSubmit(async (data) => {
-        const response = await fetch('/api/user', {
-          method: 'POST',
-          body: JSON.stringify(data),
-        });
-        const user = await response.json();
-        setUser(user);
-      })}
+      onSubmit={handleSubmit(onSubmit)}
       className="grid gap-2 text-black w-96 mt-4 mx-auto"
     >
       <h1 className="text-white text-xl">User form</h1>

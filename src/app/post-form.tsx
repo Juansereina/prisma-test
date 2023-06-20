@@ -53,7 +53,6 @@ export default function Form() {
           {...register('published')}
           placeholder="published"
         />
-        <input type="hidden" {...register('authorId')} />
       </fieldset>
       <button className="bg-white rounded p-2" type="submit">
         send
